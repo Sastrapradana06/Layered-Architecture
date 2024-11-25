@@ -1,0 +1,14 @@
+# Abaikan file konfigurasi pribadi
+.env
+
+# Abaikan direktori node_modules
+node_modules/
+
+# Abaikan file log
+*.log
+
+# Abaikan build directory
+/build
+
+# Abaikan file tertentu
+secret.txt
