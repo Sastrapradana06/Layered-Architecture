@@ -3,7 +3,8 @@ const env = require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const { registerUser, loginUser } = require("./auth.services");
+const { registerUser, loginUser, getUsers } = require("./auth.services");
+const { authenticateToken } = require("../middleware");
 
 const registerSchema = Joi.object({
   name: Joi.string().min(3).required(),
@@ -62,16 +63,24 @@ router.post("/login", async (req, res) => {
   try {
     const result = await loginUser(value.email, value.password);
 
-    res
-      .status(201)
-      .json({
-        message: "Login success",
-        user: result.user,
-        token: result.token,
-      });
+    res.status(201).json({
+      message: "Login success",
+      user: result.user,
+      token: result.token,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
+  }
+});
+
+router.get("/users", authenticateToken, async (req, res) => {
+  try {
+    const users = await getUsers();
+
+    res.status(200).json({ message: "Success", users });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed" });
   }
 });
 

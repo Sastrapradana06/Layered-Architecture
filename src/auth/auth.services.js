@@ -1,8 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-const { insertUser, findUserByEmail } = require("./auth.repository");
+const { insertUser, findUserByEmail, findUsers } = require("./auth.repository");
 
+const getUsers = async () => {
+  const users = await findUsers();
+  return users;
+};
 const registerUser = async (userData) => {
   const { name, email, password } = userData;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,4 +47,5 @@ const loginUser = async (email, password) => {
 module.exports = {
   registerUser,
   loginUser,
+  getUsers,
 };
